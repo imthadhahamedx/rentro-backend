@@ -1,0 +1,15 @@
+package com.rentro.repository;
+
+import com.rentro.entity.BookingExtensionEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface BookingExtensionRepository extends JpaRepository<BookingExtensionEntity, Integer> {
+
+    Optional<BookingExtensionEntity> findByBookingId(Integer bookingId);
+    List<BookingExtensionEntity> findByStatus(BookingExtensionEntity.ExtensionStatus status);
+}
