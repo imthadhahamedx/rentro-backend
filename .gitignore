@@ -4,6 +4,26 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Gradle
+.gradle/
+
+# Spring Boot config files
+src/main/resources/application.properties
+src/main/resources/application-*.properties
+src/main/resources/application.yml
+src/main/resources/application-*.yml
+
+# Keep example/template config files
+!src/main/resources/application-example.properties
+!src/main/resources/application-example.yml
+
+# Environment variables
+.env
+
+# Log files
+*.log
+logs/
+
 ### STS ###
 .apt_generated
 .classpath
