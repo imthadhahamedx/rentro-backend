@@ -6,6 +6,7 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,9 +18,9 @@ import java.time.LocalDateTime;
 public class BookingExtensionEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "property_id")
-    private Integer id;
+    private UUID id;
 
     @Column(name = "original_dropoff_date", nullable = false)
     private LocalDate originalDropoffDate;

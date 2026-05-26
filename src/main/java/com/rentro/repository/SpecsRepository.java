@@ -4,10 +4,9 @@ import com.rentro.entity.SpecsEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface SpecsRepository extends JpaRepository<SpecsEntity, Integer> {
+public interface SpecsRepository extends JpaRepository<SpecsEntity, UUID> {
 
-    List<SpecsEntity> findByIsActive(Boolean isActive);
 }

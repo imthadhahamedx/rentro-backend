@@ -4,12 +4,9 @@ import com.rentro.entity.DamageReportEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface DamageReportRepository extends JpaRepository<DamageReportEntity, Integer> {
+public interface DamageReportRepository extends JpaRepository<DamageReportEntity, UUID> {
 
-    List<DamageReportEntity> findByBookingId(Integer bookingId);
-    List<DamageReportEntity> findByDamageId(Integer damageId);
-    List<DamageReportEntity> findByReviewedById(Integer userId);
 }

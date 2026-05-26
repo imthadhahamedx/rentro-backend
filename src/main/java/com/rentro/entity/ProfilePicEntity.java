@@ -3,6 +3,8 @@ package com.rentro.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -13,9 +15,9 @@ import lombok.*;
 public class ProfilePicEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "property_id")
-    private Integer id;
+    private UUID id;
 
     @Lob
     @Column(name = "file_name", nullable = false)

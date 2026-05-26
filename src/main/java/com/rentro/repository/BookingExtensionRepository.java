@@ -4,12 +4,9 @@ import com.rentro.entity.BookingExtensionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface BookingExtensionRepository extends JpaRepository<BookingExtensionEntity, Integer> {
+public interface BookingExtensionRepository extends JpaRepository<BookingExtensionEntity, UUID> {
 
-    Optional<BookingExtensionEntity> findByBookingId(Integer bookingId);
-    List<BookingExtensionEntity> findByStatus(BookingExtensionEntity.ExtensionStatus status);
 }

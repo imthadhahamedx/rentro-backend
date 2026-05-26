@@ -28,7 +28,7 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private static final String[] paths={"/auth/**"};
+    private static final String[] paths={"/auth/**", "vehicle-category/public/search/**"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception{
