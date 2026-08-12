@@ -3,6 +3,7 @@ package com.rentro.config;
 import com.rentro.service.impl.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -43,6 +44,7 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         auth -> auth
+                                //.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(paths).permitAll()
                                 .anyRequest().authenticated()
                 )

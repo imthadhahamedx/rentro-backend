@@ -42,10 +42,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         var claims = jwtUtil.extractAllClaims(token);
         String email = claims.getSubject();
-        List<String> roles = List.of((String) claims.get("role"));
+        String role = claims.get("role",String.class);
 
-        List<SimpleGrantedAuthority> autherities = roles == null ? List.of() : roles.stream().map(r -> new SimpleGrantedAuthority("ROLE_" + r))
-                .toList();
+        List<SimpleGrantedAuthority> autherities = (role == null || role.isBlank())
+                ? List.of() : List.of( new SimpleGrantedAuthority("ROLE_" + role));
 
         var authToken = new UsernamePasswordAuthenticationToken(
                 email, null, autherities

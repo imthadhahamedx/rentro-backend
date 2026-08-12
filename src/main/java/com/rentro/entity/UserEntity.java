@@ -30,8 +30,8 @@ public class UserEntity {
     @Column(name = "password_hash", nullable = false, length = 250)
     private String passwordHash;
 
-    @Column(name = "phone", nullable = false, length = 20)
-    private String phone;
+    @Column(name = "phone_number", nullable = false, length = 20)
+    private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
