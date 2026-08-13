@@ -2,6 +2,7 @@ package com.rentro.controller;
 
 import com.rentro.dto.request.LoginRequestDto;
 import com.rentro.dto.request.RegisterRequestDto;
+import com.rentro.dto.response.AuthResponseDto;
 import com.rentro.dto.response.StandardResponseDto;
 import com.rentro.service.AuthService;
 import jakarta.validation.Valid;
@@ -31,13 +32,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<StandardResponseDto> login(@Valid @RequestBody LoginRequestDto dto) {
-        service.login(dto);
+        AuthResponseDto authResponseDto = service.login(dto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(StandardResponseDto.builder()
                         .code(201)
                         .message("User logged successfully")
-                        .data(null)
+                        .data(authResponseDto)
                         .build());
     }
 }

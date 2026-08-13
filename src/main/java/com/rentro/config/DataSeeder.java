@@ -25,7 +25,7 @@ public class DataSeeder implements CommandLineRunner {
 
             new SeedUser(
                     "Super Admin",
-                    "superadmin@carrental.com",
+                    "superadmin@rentro.com",
                     "SuperAdmin@123",
                     "0771000001",
                     UserEntity.Role.SUPER_ADMIN
@@ -33,7 +33,7 @@ public class DataSeeder implements CommandLineRunner {
 
             new SeedUser(
                     "Admin User",
-                    "admin@carrental.com",
+                    "admin@rentro.com",
                     "Admin@1234",
                     "0771000002",
                     UserEntity.Role.ADMIN
@@ -41,7 +41,7 @@ public class DataSeeder implements CommandLineRunner {
 
             new SeedUser(
                     "Staff Member",
-                    "staff@carrental.com",
+                    "staff@rentro.com",
                     "Staff@1234",
                     "0771000003",
                     UserEntity.Role.STAFF
@@ -52,11 +52,11 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        log.info("=== DataSeeder: checking seed accounts ===");
+        log.info("DataSeeder: checking seed accounts");
 
         for (SeedUser seed : SEED_USERS) {
             if (userRepository.existsByEmail(seed.email())) {
-                log.info("  [SKIP]   {} — already exists ({})", seed.role(), seed.email());
+                log.info("[SKIP]   {} — already exists ({})", seed.role(), seed.email());
                 continue;
             }
 
@@ -71,7 +71,7 @@ public class DataSeeder implements CommandLineRunner {
                     .build();
 
             userRepository.save(userEntity);
-            log.info("  [SAVED]  {} — created ({})", seed.role(), seed.email());
+            log.info("[SAVED]  {} — created ({})", seed.role(), seed.email());
         }
 
         log.info("DataSeeder: done");
