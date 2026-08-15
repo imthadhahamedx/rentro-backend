@@ -19,64 +19,28 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class VehicleServiceImpl implements VehicleService {
 
-    private final VehicleRepository vehicleRepository;
-    private final VehicleMapper vehicleMapper;
-
     @Override
     public PaginatedResponseDto search(String searchText, int page, int size) {
-        return PaginatedResponseDto.<VehiclePublicResponseDto>builder()
-                .count(
-                        vehicleRepository.findAllCount(searchText)
-                )
-                .dataList(
-                        vehicleRepository.findAllVehicleEntity(searchText, PageRequest.of(page,size))
-                                .stream().map((e) -> vehicleMapper.toVehiclePublicResponseDto(e)).toList()
-                )
-                .build();
+        return null;
     }
 
     @Override
     public PaginatedResponseDto findAllForAdmin(String searchText, int page, int size) {
-        return PaginatedResponseDto.<VehicleResponseDto>builder()
-                .count(
-                        vehicleRepository.findAllCount(searchText)
-                )
-                .dataList(
-                        vehicleRepository.findAllVehicleEntity(searchText, PageRequest.of(page,size))
-                                .stream().map((e) -> vehicleMapper.toVehicleResponseDto(e)).toList()
-                )
-                .build();
+        return null;
     }
 
     @Override
     public void create(VehicleRequestDto dto) {
-        vehicleRepository.save(vehicleMapper.toVehicleEntity(dto));
+
     }
 
     @Override
     public void deleteById(UUID id) {
-        vehicleRepository.deleteById(id);
+
     }
 
     @Override
     public void update(UUID id, VehicleRequestDto dto) {
-        VehicleEntity vehicleEntity = vehicleRepository.findById(id)
-                .orElseThrow(() -> new EntryNotFoundException("Vehicle not found"));
 
-        vehicleEntity.setMake(dto.getMake());
-        vehicleEntity.setModel(dto.getModel());
-        vehicleEntity.setModelYear(dto.getModelYear());
-        vehicleEntity.setRegNo(dto.getRegNo());
-        vehicleEntity.setColour(dto.getColour());
-        vehicleEntity.setTransmission(dto.getTransmission());
-        vehicleEntity.setFuelType(dto.getFuelType());
-        vehicleEntity.setSeatCount(dto.getSeatCount());
-        vehicleEntity.setDoorCount(dto.getDoorCount());
-        vehicleEntity.setDailyRate(dto.getDailyRate());
-        vehicleEntity.setStatus(dto.getStatus());
-        vehicleEntity.setCurrentMileageKm(dto.getCurrentMileageKm());
-        vehicleEntity.setVehicleCategory(dto.getVehicleCategory());
-
-        vehicleRepository.save(vehicleEntity);
     }
 }

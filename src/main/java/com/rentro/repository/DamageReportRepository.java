@@ -9,4 +9,7 @@ import java.util.UUID;
 @Repository
 public interface DamageReportRepository extends JpaRepository<DamageReportEntity, UUID> {
 
+
+    // Not yet reviewed by a staff member = "open"
+    long countByReviewedByIsNull();
 }
