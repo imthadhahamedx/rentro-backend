@@ -1,14 +1,16 @@
 package com.rentro.dto.request.vehicle;
 
-import com.rentro.entity.VehicleCategoryEntity;
-import com.rentro.entity.VehicleEntity;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
+
+/**
+ * JSON body carried inside the multipart request (part name: "vehicle").
+ * Used for both create and update.
+ */
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,39 +29,47 @@ public class VehicleRequestDto {
     private String model;
 
     @NotNull(message = "Model year is required")
+    @Min(value = 1980, message = "Model year must be 1980 or later")
+    @Max(value = 2100, message = "Model year is invalid")
     private Integer modelYear;
 
     @NotBlank(message = "Registration number is required")
     @Size(max = 45, message = "Registration number cannot exceed 45 characters")
     private String regNo;
 
-    @NotBlank(message = "Colour is required")
     @Size(max = 45, message = "Colour cannot exceed 45 characters")
     private String colour;
 
-    @NotNull(message = "Transmission is required")
-    private VehicleEntity.Transmission transmission;
+    @NotBlank(message = "Transmission is required")
+    @Pattern(regexp = "MANUAL|AUTOMATIC|TIPTRONIC", message = "Transmission must be one of MANUAL, AUTOMATIC, TIPTRONIC")
+    private String transmission;
 
-    @NotNull(message = "Fuel type is required")
-    private VehicleEntity.FuelType fuelType;
+    @NotBlank(message = "Fuel type is required")
+    @Pattern(regexp = "PETROL|DIESEL|HYBRID|ELECTRIC", message = "Fuel type must be one of PETROL, DIESEL, HYBRID, ELECTRIC")
+    private String fuelType;
 
     @NotNull(message = "Seat count is required")
+    @Positive(message = "Seat count must be positive")
     private Integer seatCount;
 
     @NotNull(message = "Door count is required")
+    @Positive(message = "Door count must be positive")
     private Integer doorCount;
 
     @NotNull(message = "Daily rate is required")
-    @DecimalMin(value = "0.0", inclusive = false, message = "Daily rate must be positive")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Daily rate must be greater than 0")
+    @Digits(integer = 8, fraction = 2, message = "Daily rate must have at most 2 decimal places")
     private BigDecimal dailyRate;
 
-    @NotNull(message = "Status is required")
-    private VehicleEntity.Status status;
+    @Pattern(regexp = "AVAILABLE|RENTED|MAINTENANCE|INACTIVE", message = "Status must be one of AVAILABLE, RENTED, MAINTENANCE, INACTIVE")
+    private String status;
 
-    @NotNull(message = "Current mileage is required")
+    @PositiveOrZero(message = "Current mileage cannot be negative")
     private Integer currentMileageKm;
 
-    @NotNull(message = "Vehicle category ID is required")
-    private VehicleCategoryEntity vehicleCategory;
+    @NotNull(message = "Vehicle category is required")
+    private UUID categoryId;
 
+    /** Optional - existing Specs to attach to this vehicle. */
+    private List<UUID> specIds;
 }

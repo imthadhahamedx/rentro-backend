@@ -3,18 +3,14 @@ package com.rentro.dto.response.vehicle;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
-@NoArgsConstructor
 @AllArgsConstructor
-@Setter
+@NoArgsConstructor
 @Getter
-@ToString
+@Setter
 @Builder
-public class VehicleResponseDto {
-
+public class VehicleListItemDto {
     private UUID id;
     private String make;
     private String model;
@@ -23,17 +19,8 @@ public class VehicleResponseDto {
     private String colour;
     private String transmission;
     private String fuelType;
-    private Integer seatCount;
-    private Integer doorCount;
     private BigDecimal dailyRate;
     private String status;
-    private Integer currentMileageKm;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
-    private UUID categoryId;
     private String categoryName;
-
-    private List<String> specifications;
-    private List<VehicleImageResponseDto> images;
+    private String primaryImageUrl;
 }

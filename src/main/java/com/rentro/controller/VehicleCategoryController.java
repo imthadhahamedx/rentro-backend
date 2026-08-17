@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/vehicle-category")
+@RequestMapping("/vehicle-categories")
 @RequiredArgsConstructor
 public class VehicleCategoryController {
 
