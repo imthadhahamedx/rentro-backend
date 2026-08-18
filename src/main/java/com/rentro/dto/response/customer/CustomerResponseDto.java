@@ -22,7 +22,7 @@ public class CustomerResponseDto {
     private LocalDate licenseExpiryDate;
     private LocalDate dateOfBirth;
     private String notes;
-    private boolean isActive;
+    private Boolean isActive;
     private boolean emailVerified;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

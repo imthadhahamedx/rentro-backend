@@ -19,6 +19,6 @@ public class CustomerListItemResponseDto {
     private String nic;
     private String drivingLicenseNo;
     private LocalDate licenseExpiryDate;
-    private boolean isActive;
+    private Boolean isActive;
     private LocalDateTime createdAt;
 }
