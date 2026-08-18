@@ -57,4 +57,31 @@ public interface BookingRepository extends JpaRepository<BookingEntity, UUID> {
             @Param("dropoffDate") LocalDate dropoffDate,
             @Param("excludeBookingId") UUID excludeBookingId
     );
+
+    // ─── Customer management: booking history for a single customer ───────────
+    long countByCustomerId(UUID customerId);
+
+    @Query("SELECT b FROM BookingEntity b JOIN b.vehicle v " +
+            "WHERE b.customer.id = :customerId " +
+            "AND (:status IS NULL OR b.status = :status) " +
+            "ORDER BY b.createdAt DESC")
+    Page<BookingEntity> searchByCustomer(
+            @Param("customerId") UUID customerId,
+            @Param("status") BookingEntity.BookingStatus status,
+            Pageable pageable
+    );
+
+    // ─── Location management: booking counts / guard for deletion ─────────────
+    long countByPickupLocationId(UUID locationId);
+
+    long countByDropoffLocationId(UUID locationId);
+
+    // ─── Reports: all bookings created within a period, fully hydrated ────────
+    @Query("SELECT b FROM BookingEntity b " +
+            "JOIN FETCH b.customer c JOIN FETCH c.user " +
+            "JOIN FETCH b.vehicle v " +
+            "LEFT JOIN FETCH b.pickupLocation " +
+            "WHERE b.createdAt BETWEEN :start AND :end " +
+            "ORDER BY b.createdAt DESC")
+    List<BookingEntity> findAllForReport(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 }
