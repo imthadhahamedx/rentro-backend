@@ -3,6 +3,7 @@ package com.rentro.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -19,23 +20,31 @@ public class VehicleDamageImageEntity {
     @Column(name = "property_id")
     private UUID id;
 
-    @Lob
-    @Column(name = "file_name", nullable = false)
-    private byte[] fileName;
+    /** Original file name as uploaded by the client. */
+    @Column(name = "file_name", nullable = false, length = 255)
+    private String fileName;
 
-    @Lob
-    @Column(name = "directory", nullable = false)
-    private byte[] directory;
+    /** S3 object key, e.g. "damage/{damageId}/{uuid}.jpg" - used to delete/replace the object. */
+    @Column(name = "directory", nullable = false, length = 512)
+    private String directory;
 
-    @Lob
-    @Column(name = "resource_url", nullable = false)
-    private byte[] resourceUrl;
+    /** Public S3 URL used by clients to render the image. */
+    @Column(name = "resource_url", nullable = false, length = 1024)
+    private String resourceUrl;
 
-    @Lob
-    @Column(name = "hash", nullable = false)
-    private byte[] hash;
+    /** Content-type of the stored file, e.g. "image/jpeg". */
+    @Column(name = "hash", length = 100)
+    private String hash;
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "damage_property_id", nullable = false)
     private DamageEntity damage;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 }
