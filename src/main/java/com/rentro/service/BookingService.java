@@ -2,17 +2,14 @@ package com.rentro.service;
 
 import com.rentro.dto.request.booking.*;
 import com.rentro.dto.response.PaginatedResponseDto;
-import com.rentro.dto.response.booking.BookingDetailResponseDto;
-import com.rentro.dto.response.booking.CustomerOptionResponseDto;
-import com.rentro.dto.response.booking.LocationOptionResponseDto;
-import com.rentro.dto.response.booking.VehicleOptionResponseDto;
+import com.rentro.dto.response.booking.*;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface BookingService {
 
-    PaginatedResponseDto findAll(String searchText, String status, int page, int size);
+    PaginatedResponseDto<BookingListItemResponseDto> findAll(String searchText, String status, int page, int size);
 
     BookingDetailResponseDto findById(UUID id);
 

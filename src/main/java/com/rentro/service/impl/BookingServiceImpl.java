@@ -2,10 +2,7 @@ package com.rentro.service.impl;
 
 import com.rentro.dto.request.booking.*;
 import com.rentro.dto.response.PaginatedResponseDto;
-import com.rentro.dto.response.booking.BookingDetailResponseDto;
-import com.rentro.dto.response.booking.CustomerOptionResponseDto;
-import com.rentro.dto.response.booking.LocationOptionResponseDto;
-import com.rentro.dto.response.booking.VehicleOptionResponseDto;
+import com.rentro.dto.response.booking.*;
 import com.rentro.entity.*;
 import com.rentro.exception.EntryNotFoundException;
 import com.rentro.exception.ValidationException;
@@ -49,9 +46,9 @@ public class BookingServiceImpl implements BookingService {
 
         Page<BookingEntity> result = bookingRepository.search(statusEnum, text, PageRequest.of(page, size));
 
-        return PaginatedResponseDto.builder()
+        return PaginatedResponseDto.<BookingListItemResponseDto>builder()
                 .count(result.getTotalElements())
-                .dataList(Collections.singletonList(result.getContent().stream().map(bookingMapper::toBookingListItemResponseDto).toList()))
+                .dataList(result.getContent().stream().map(bookingMapper::toBookingListItemResponseDto).toList())
                 .build();
     }
 
