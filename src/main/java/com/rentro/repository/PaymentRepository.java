@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -21,6 +22,17 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, UUID> {
     @Query("SELECT COALESCE(SUM(p.amount), 0) FROM PaymentEntity p " +
             "WHERE p.status = :status AND p.paidAt BETWEEN :start AND :end")
     BigDecimal sumAmountByStatusAndPaidAtBetween(
+            @Param("status") PaymentEntity.PaymentStatus status,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end
+    );
+
+    // ─── Reports: completed payments within a period, fully hydrated ──────────
+    @Query("SELECT p FROM PaymentEntity p " +
+            "JOIN FETCH p.booking b JOIN FETCH b.vehicle v " +
+            "WHERE p.status = :status AND p.paidAt BETWEEN :start AND :end " +
+            "ORDER BY p.paidAt DESC")
+    List<PaymentEntity> findCompletedForReport(
             @Param("status") PaymentEntity.PaymentStatus status,
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end

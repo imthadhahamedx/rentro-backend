@@ -48,5 +48,7 @@ public interface VehicleRepository extends JpaRepository<VehicleEntity, UUID> {
             "WHERE v.id = :id")
     Optional<VehicleEntity> findByIdWithDetails(@Param("id") UUID id);
 
-
+    // ─── Reports: full fleet with category, for utilization breakdowns ────────
+    @Query("SELECT v FROM VehicleEntity v LEFT JOIN FETCH v.vehicleCategory")
+    List<VehicleEntity> findAllWithCategory();
 }
