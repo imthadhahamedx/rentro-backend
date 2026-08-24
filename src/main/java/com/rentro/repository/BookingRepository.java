@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -26,6 +27,8 @@ public interface BookingRepository extends JpaRepository<BookingEntity, UUID> {
     List<BookingEntity> findByStatusOrderByDropoffDateAsc(BookingEntity.BookingStatus status);
 
     boolean existsByBookingRef(String bookingRef);
+
+    Optional<BookingEntity> findByBookingRef(String bookingRef);
 
     // ─── Booking list (search + optional status filter) ───────────────────────
     @Query("SELECT b FROM BookingEntity b " +

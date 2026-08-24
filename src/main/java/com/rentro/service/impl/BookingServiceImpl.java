@@ -61,6 +61,13 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional(readOnly = true)
+    public BookingDetailResponseDto findByRef(String id) {
+        BookingEntity bookingEntity = getBookingOrThrow(id);
+        return bookingMapper.toBookingDetailResponseDto(bookingEntity);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<CustomerOptionResponseDto> findCustomerOptions(String searchText) {
         String text = searchText == null ? "" : searchText.trim();
         return customerRepository.search(text).stream().map(bookingMapper::toCustomerOptionResponseDto).toList();
@@ -283,6 +290,11 @@ public class BookingServiceImpl implements BookingService {
     // ─── Helpers ────────────────────────────────────────────────────────────
     private BookingEntity getBookingOrThrow(UUID id) {
         return bookingRepository.findById(id)
+                .orElseThrow(() -> new EntryNotFoundException("Booking not found"));
+    }
+
+    private BookingEntity getBookingOrThrow(String id) {
+        return bookingRepository.findByBookingRef(id)
                 .orElseThrow(() -> new EntryNotFoundException("Booking not found"));
     }
 

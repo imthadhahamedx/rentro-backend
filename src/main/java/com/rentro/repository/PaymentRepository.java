@@ -1,6 +1,9 @@
 package com.rentro.repository;
 
+import com.rentro.entity.BookingEntity;
 import com.rentro.entity.PaymentEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,5 +39,19 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, UUID> {
             @Param("status") PaymentEntity.PaymentStatus status,
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end
+    );
+
+    @Query("SELECT p FROM PaymentEntity p " +
+            "WHERE (:status IS NULL OR p.status = :status) " +
+            "AND (" +
+            ":searchText IS NULL " +
+            "OR :searchText = '' " +
+            "OR LOWER(p.paymentRef) LIKE LOWER(CONCAT('%', :searchText, '%')) " +
+            "OR LOWER(p.transactionId) LIKE LOWER(CONCAT('%', :searchText, '%'))" +
+            ")")
+    Page<PaymentEntity> findAllByStatus(
+            @Param("searchText") String searchText,
+            @Param("status") PaymentEntity.PaymentStatus status,
+            Pageable pageable
     );
 }

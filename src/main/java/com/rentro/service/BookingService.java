@@ -13,6 +13,8 @@ public interface BookingService {
 
     BookingDetailResponseDto findById(UUID id);
 
+    BookingDetailResponseDto findByRef(String ref);
+
     UUID create(BookingCreateRequestDto dto);
 
     void confirm(UUID id);

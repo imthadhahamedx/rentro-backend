@@ -32,7 +32,8 @@ public class SecurityConfig {
     private static final String[] paths={
             "/auth/**",
             "/vehicle-category/public/search/**",
-            "/vehicle/public/search/**"
+            "/vehicle/public/search/**"//,
+            //"/payments/payhere/notify"
     };
 
     @Bean

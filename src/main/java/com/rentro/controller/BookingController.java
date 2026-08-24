@@ -48,6 +48,17 @@ public class BookingController {
         );
     }
 
+    @GetMapping("/payment/{ref}")
+    public ResponseEntity<StandardResponseDto> findByRef(@PathVariable String ref) {
+        return ResponseEntity.ok(
+                StandardResponseDto.builder()
+                        .code(200)
+                        .message("Booking fetched successfully")
+                        .data(bookingService.findByRef(ref))
+                        .build()
+        );
+    }
+
     // ─── Options for the "New booking" form ────────────────────────────────
     @GetMapping("/options/customers")
     public ResponseEntity<StandardResponseDto> customerOptions(
