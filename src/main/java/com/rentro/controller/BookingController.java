@@ -1,8 +1,10 @@
 package com.rentro.controller;
 
+import com.rentro.dto.request.PublicBookingRequestDto;
 import com.rentro.dto.request.booking.*;
 import com.rentro.dto.response.StandardResponseDto;
 import com.rentro.service.BookingService;
+import com.rentro.service.PublicBookingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,13 +17,32 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/booking")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('STAFF', 'ADMIN', 'SUPER_ADMIN')")
 public class BookingController {
 
     private final BookingService bookingService;
+    private final PublicBookingService visitorBookingService;
+
+    // ── Visitor / public endpoint ────────────────────────────────────────────
+    /**
+     * No auth required — called from the public website.
+     * POST /bookings/visitor-requests
+     */
+    @PostMapping("/public-requests")
+    public ResponseEntity<StandardResponseDto> createVisitorRequest(
+            @Valid @RequestBody PublicBookingRequestDto dto
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                StandardResponseDto.builder()
+                        .code(201)
+                        .message("Booking request submitted successfully")
+                        .data(visitorBookingService.createRequest(dto))
+                        .build()
+        );
+    }
 
     // ─── List / detail ──────────────────────────────────────────────────────
     @GetMapping
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<StandardResponseDto> findAll(
             @RequestParam(required = false, defaultValue = "") String searchText,
             @RequestParam(required = false) String status,
@@ -38,6 +59,7 @@ public class BookingController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<StandardResponseDto> findById(@PathVariable UUID id) {
         return ResponseEntity.ok(
                 StandardResponseDto.builder()
@@ -49,6 +71,7 @@ public class BookingController {
     }
 
     @GetMapping("/payment/{ref}")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<StandardResponseDto> findByRef(@PathVariable String ref) {
         return ResponseEntity.ok(
                 StandardResponseDto.builder()
@@ -59,46 +82,9 @@ public class BookingController {
         );
     }
 
-    // ─── Options for the "New booking" form ────────────────────────────────
-    @GetMapping("/options/customers")
-    public ResponseEntity<StandardResponseDto> customerOptions(
-            @RequestParam(required = false, defaultValue = "") String searchText
-    ) {
-        return ResponseEntity.ok(
-                StandardResponseDto.builder()
-                        .code(200)
-                        .message("Customer options fetched successfully")
-                        .data(bookingService.findCustomerOptions(searchText))
-                        .build()
-        );
-    }
-
-    @GetMapping("/options/vehicles")
-    public ResponseEntity<StandardResponseDto> vehicleOptions(
-            @RequestParam(required = false, defaultValue = "") String searchText
-    ) {
-        return ResponseEntity.ok(
-                StandardResponseDto.builder()
-                        .code(200)
-                        .message("Vehicle options fetched successfully")
-                        .data(bookingService.findAvailableVehicleOptions(searchText))
-                        .build()
-        );
-    }
-
-    @GetMapping("/options/locations")
-    public ResponseEntity<StandardResponseDto> locationOptions() {
-        return ResponseEntity.ok(
-                StandardResponseDto.builder()
-                        .code(200)
-                        .message("Location options fetched successfully")
-                        .data(bookingService.findLocationOptions())
-                        .build()
-        );
-    }
-
     // ─── Create ─────────────────────────────────────────────────────────────
     @PostMapping
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<StandardResponseDto> create(@Valid @RequestBody BookingCreateRequestDto dto) {
         UUID id = bookingService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -112,6 +98,7 @@ public class BookingController {
 
     // ─── Lifecycle actions ──────────────────────────────────────────────────
     @PutMapping("/{id}/confirm")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<StandardResponseDto> confirm(@PathVariable UUID id) {
         bookingService.confirm(id);
         return ResponseEntity.ok(
@@ -124,6 +111,7 @@ public class BookingController {
     }
 
     @PutMapping("/{id}/activate")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<StandardResponseDto> activate(@PathVariable UUID id) {
         bookingService.activate(id);
         return ResponseEntity.ok(
@@ -136,6 +124,7 @@ public class BookingController {
     }
 
     @PutMapping("/{id}/complete")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<StandardResponseDto> complete(
             @PathVariable UUID id,
             @Valid @RequestBody BookingCompleteRequestDto dto
@@ -151,6 +140,7 @@ public class BookingController {
     }
 
     @PutMapping("/{id}/cancel")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<StandardResponseDto> cancel(
             @PathVariable UUID id,
             @Valid @RequestBody BookingCancelRequestDto dto
@@ -166,6 +156,7 @@ public class BookingController {
     }
 
     @PostMapping("/{id}/extension")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<StandardResponseDto> extend(
             @PathVariable UUID id,
             @Valid @RequestBody BookingExtensionRequestDto dto
@@ -181,6 +172,7 @@ public class BookingController {
     }
 
     @PutMapping("/{id}/notes")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<StandardResponseDto> updateNotes(
             @PathVariable UUID id,
             @Valid @RequestBody BookingNotesRequestDto dto
@@ -194,4 +186,46 @@ public class BookingController {
                         .build()
         );
     }
+
+    // ─── Options for the "New booking" form ────────────────────────────────
+    @GetMapping("/options/customers")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN', 'SUPER_ADMIN')")
+    public ResponseEntity<StandardResponseDto> customerOptions(
+            @RequestParam(required = false, defaultValue = "") String searchText
+    ) {
+        return ResponseEntity.ok(
+                StandardResponseDto.builder()
+                        .code(200)
+                        .message("Customer options fetched successfully")
+                        .data(bookingService.findCustomerOptions(searchText))
+                        .build()
+        );
+    }
+
+    @GetMapping("/options/vehicles")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN', 'SUPER_ADMIN')")
+    public ResponseEntity<StandardResponseDto> vehicleOptions(
+            @RequestParam(required = false, defaultValue = "") String searchText
+    ) {
+        return ResponseEntity.ok(
+                StandardResponseDto.builder()
+                        .code(200)
+                        .message("Vehicle options fetched successfully")
+                        .data(bookingService.findAvailableVehicleOptions(searchText))
+                        .build()
+        );
+    }
+
+    @GetMapping("/options/locations")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN', 'SUPER_ADMIN')")
+    public ResponseEntity<StandardResponseDto> locationOptions() {
+        return ResponseEntity.ok(
+                StandardResponseDto.builder()
+                        .code(200)
+                        .message("Location options fetched successfully")
+                        .data(bookingService.findLocationOptions())
+                        .build()
+        );
+    }
+
 }

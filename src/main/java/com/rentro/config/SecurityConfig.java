@@ -31,8 +31,10 @@ public class SecurityConfig {
 
     private static final String[] paths={
             "/auth/**",
-            "/vehicle-category/public/search/**",
-            "/vehicle/public/search/**"//,
+            "/vehicle-categories/public/search/**",
+            "/vehicles/public/search",
+            "/vehicles/public/**",
+            "/booking/public-requests",
             //"/payments/payhere/notify"
     };
 

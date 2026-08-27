@@ -32,7 +32,7 @@ public class VehicleController {
     private final VehicleService vehicleService;
 
     // ─── public / visitor browsing ───────────────────────────────────────
-    @GetMapping("/visitors/search")
+    @GetMapping("/public/search")
     public ResponseEntity<StandardResponseDto> search(
             @RequestParam(required = false, defaultValue = "") String searchText,
             @RequestParam(required = false) UUID categoryId,
@@ -48,7 +48,7 @@ public class VehicleController {
         );
     }
 
-    @GetMapping("/visitors/{id}")
+    @GetMapping("/public/{id}")
     public ResponseEntity<StandardResponseDto> findByIdPublic(@PathVariable UUID id) {
         return ResponseEntity.ok(
                 StandardResponseDto.builder()
