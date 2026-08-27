@@ -35,6 +35,7 @@ public class SecurityConfig {
             "/vehicles/public/search",
             "/vehicles/public/**",
             "/booking/public-requests",
+            "/test/**"
             //"/payments/payhere/notify"
     };
 
